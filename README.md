@@ -10,3 +10,4 @@ apk add cargo
 apk add bcc
 apk add git
 apk add base-cbuild
+mount -t tracefs tracefs /sys/kernel/tracing
