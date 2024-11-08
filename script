@@ -1,11 +1,11 @@
-apk add clang 
-apk add llvm 
-apk add go 
-apk add bpftrace 
-apk add linux-headers 
-apk add tmux 
-apk add cargo 
-apk add bcc 
-apk add git 
-apk add base-cbuild 
+apk --no-interactive add clang 
+apk --no-interactive add llvm 
+apk --no-interactive add go 
+apk --no-interactive add bpftrace 
+apk --no-interactive add linux-headers 
+apk --no-interactive add tmux 
+apk --no-interactive add cargo 
+apk --no-interactive add bcc 
+apk --no-interactive add git 
+apk --no-interactive add base-cbuild 
 modprobe kheaders mount -t tracefs tracefs /sys/kernel/tracing
