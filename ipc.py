@@ -85,38 +85,36 @@ void trace_end(struct pt_regs* ctx){
 
     int cpu = bpf_get_smp_processor_id();
 
-    u64 clk_start = clk.perf_read(cpu);
-    u64 inst_start = inst.perf_read(cpu);
-    u64 time_start = bpf_ktime_get_ns();
-
-    struct perf_delta perf_data = {};
+    u64 clk_end = clk.perf_read(cpu);
+    u64 inst_end = inst.perf_read(cpu);
+    u64 time_end = bpf_ktime_get_ns();
+    
+    struct perf_delta perf_data = {} ;
     u64* kptr = NULL;
     kptr = data.lookup(&clk_k);
 
-    if(kptr){
+    // Find elements in map, if not found return
+    if (kptr) {
         perf_data.clk_delta = clk_end - *kptr;
-    }else{
+    } else {
         return;
     }
-
+    
     kptr = data.lookup(&inst_k);
-    if(kptr){
+    if (kptr) {
         perf_data.inst_delta = inst_end - *kptr;
-    }else{
+    } else {
         return;
     }
 
     kptr = data.lookup(&time);
-
-    kptr = data.lookup(&inst_k);
-    if(kptr){
+    if (kptr) {
         perf_data.time_delta = time_end - *kptr;
-    }else{
+    } else {
         return;
     }
 
     output.perf_submit(ctx, &perf_data, sizeof(struct perf_delta));
-
 }
 """
 
@@ -134,7 +132,7 @@ num_cpus = len(utils.get_online_cpus())
 
 b = BPF(text=code, cflags=['-DMAX_CPUS=%s' % str(num_cpus)])
 
-b.attach_uprobe(name=options.lib_name, sym=options.sym, fm_name="trace_start")
+b.attach_uprobe(name=options.lib_name, sym=options.sym, fn_name="trace_start")
 b.attach_uretprobe(name=options.lib_name, sym=options.sym, fn_name="trace_end")
 
 def print_data(cpu, data, size):
