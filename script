@@ -1,3 +1,6 @@
+apk update
+apk upgrade
+apk fix
 apk --no-interactive add clang 
 apk --no-interactive add llvm 
 apk --no-interactive add go 
